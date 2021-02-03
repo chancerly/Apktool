@@ -72,8 +72,10 @@ public class ARSCDecoder {
     private ResPackage[] readTableHeader() throws IOException, AndrolibException {
         nextChunkCheckType(Header.TYPE_TABLE);
         int packageCount = mIn.readInt();
+        LOGGER.info("zzz: packageCount = " + packageCount);
 
         mTableStrings = StringBlock.read(mIn);
+        LOGGER.info("zzz: read  mTableStrings done");
         ResPackage[] packages = new ResPackage[packageCount];
 
         nextChunk();
@@ -87,6 +89,7 @@ public class ARSCDecoder {
     private ResPackage readTablePackage() throws IOException, AndrolibException {
         checkChunkType(Header.TYPE_PACKAGE);
         int id = mIn.readInt();
+        LOGGER.info("zzz: readTablePackage id: " + id);
 
         if (id == 0) {
             // This means we are dealing with a Library Package, we should just temporarily
@@ -100,6 +103,7 @@ public class ARSCDecoder {
         }
 
         String name = mIn.readNullEndedString(128, true);
+        LOGGER.info("zzz: readTablePackage name: " + name);
         /* typeStrings */mIn.skipInt();
         /* lastPublicType */mIn.skipInt();
         /* keyStrings */mIn.skipInt();
@@ -117,7 +121,9 @@ public class ARSCDecoder {
         }
 
         mTypeNames = StringBlock.read(mIn);
+        LOGGER.info("zzz: readTablePackage mTypeNames done");
         mSpecNames = StringBlock.read(mIn);
+        LOGGER.info("zzz: readTablePackage mSpecNames done");
 
         mResId = id << 24;
         mPkg = new ResPackage(mResTable, id, name);
@@ -581,6 +587,7 @@ public class ARSCDecoder {
         public final int endPosition;
 
         public Header(short type, int headerSize, int chunkSize, int headerStart) {
+            LOGGER.info("zzz: header (type: " + type + ",headerSize: " + headerSize + ",chunkSize: " + chunkSize + ",headerStart: " + headerStart);
             this.type = type;
             this.headerSize = headerSize;
             this.chunkSize = chunkSize;
@@ -593,6 +600,7 @@ public class ARSCDecoder {
             int start = countIn.getCount();
             try {
                 type = in.readShort();
+                LOGGER.info("zzz: header read type: " + type);
             } catch (EOFException ex) {
                 return new Header(TYPE_NONE, 0, 0, countIn.getCount());
             }

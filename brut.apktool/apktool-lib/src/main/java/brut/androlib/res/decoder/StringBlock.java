@@ -61,7 +61,9 @@ public class StringBlock {
 
         int size = ((stylesOffset == 0) ? chunkSize : stylesOffset) - stringsOffset;
         block.m_strings = new byte[size];
+        LOGGER.info("zzz: size = " + size + " while stylesOffset = " + stylesOffset);
         reader.readFully(block.m_strings);
+        LOGGER.info("zzz: block.m_strings = " + new String(block.m_strings));
 
         if (stylesOffset != 0) {
             size = (chunkSize - stylesOffset);
